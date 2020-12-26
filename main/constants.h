@@ -33,10 +33,10 @@
 #define LED_DEFAULT_STATION 23
 
 static int UART_DEFAULT_ENABLE[3] = {1, 1, 1};
-static int UART_DEFAULT_TCP_PORT[3] = {2220, 2221, 2222};
+static int UART_DEFAULT_TCP_PORT[3] = {2220, 8080, 2222};
 
-static int UART_DEFAULT_TX_PIN[3] = {25, 32, 19};
-static int UART_DEFAULT_RX_PIN[3] = {21, 26, 22};
+static int UART_DEFAULT_TX_PIN[3] = {25, 4, 19};
+static int UART_DEFAULT_RX_PIN[3] = {21, 5, 22};
 
 static int LED_DEFAULT_RX[3] = {10, 12, 14};
 static int LED_DEFAULT_TX[3] = {15, 17, 19};

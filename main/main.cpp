@@ -5,12 +5,12 @@
 #include "asio.hpp"
 #include "protocol_examples_common.h"
 #include "esp_event.h"
-#include "tcpip_adapter.h"
+#include "esp_netif.h"
 #include "nvs_flash.h"
 #include "esp_wifi.h"
 #include "esp_system.h"
 #include "uart_server.h"
-#include "LED_Display.h"
+// #include "LED_Display.h"
 #include "lwip/err.h"
 #include "lwip/sys.h"
 #include <cstdio>
@@ -219,7 +219,7 @@ void start_and_run_console()
     }
 }
 
-void start_wifi(LED_Display *dis)
+void start_wifi()
 {
 
   // Wifi Mode
@@ -227,7 +227,7 @@ void start_wifi(LED_Display *dis)
   if (storage::read_int32(STORAGE_NAMESPACE, STORAGE_WIFI_MODE, &mode) != ESP_OK)
     mode = WIFI_MODE_AP; // AP
 
-  dis->drawpixB(mode ? LED_DEFAULT_STATION : LED_DEFAULT_AP, WHITE); 
+  // dis->drawpixB(mode ? LED_DEFAULT_STATION : LED_DEFAULT_AP, WHITE); 
 
   // Wifi SSID
   char wifi_ssid[WIFI_SSID_MAX_LENGTH+1];
@@ -248,24 +248,31 @@ void start_wifi(LED_Display *dis)
 
   // Connect Wifi
   if (mode == WIFI_MODE_AP)
+  {
+    printf("Wifi configured as AP\n");
     wifi::wifi_init_softap(wifi_ssid, wifi_passwd, 8, channel);
+
+  }
   else
+  {
+    printf("Wifi configured as station\n");
     wifi::wifi_init_sta(wifi_ssid, wifi_passwd);
+  }
 }
 
-LED_Display * start_display()
-{
-  // Init LED MAtrix
-    LED_Display *dis = new LED_Display();
-    dis->setTaskName("LEDs");
-		dis->setTaskPriority(2);
-    dis->setCore(1);
-		dis->start();
+// LED_Display * start_display()
+// {
+//   // Init LED MAtrix
+//     LED_Display *dis = new LED_Display();
+//     dis->setTaskName("LEDs");
+// 		dis->setTaskPriority(2);
+//     dis->setCore(1);
+// 		dis->start();
 
-    return dis;
-}
+//     return dis;
+// }
 
-void start_uarts(LED_Display *dis)
+void start_uarts()
 {
   asio::io_context io_context;
   uart_server *servers[3];
@@ -341,7 +348,7 @@ void start_uarts(LED_Display *dis)
     ESP_LOGI("START_UART", "Uart N: %d, Enabled: %d, Bauds: %d, TCP: %d, TXPin: %d, RXPin: %d, TXBuff: %d, RXBuff: %d, DataBits: %d, Parity: %d, StopBits: %d", i, enabled, bauds, tcp_port, tx_pin, rx_pin, tx_buffer, rx_buffer, data_bits, parity, stop_bits);
     configure_uart((uart_port_t)i, bauds, tx_pin, rx_pin, tx_buffer, rx_buffer, data_bits, (uart_parity_t)parity, stop_bits);
     ESP_LOGI("START_UART", "Server Uart N: %d, RXLed: %d, TXLed: %d, ConnLed: %d", i, LED_DEFAULT_RX[i], LED_DEFAULT_TX[i], LED_DEFAULT_CONNECTED[i]);
-    servers[i] = new uart_server(&io_context, tcp_port, (uart_port_t)i, dis, LED_DEFAULT_RX[i], LED_DEFAULT_TX[i], LED_DEFAULT_CONNECTED[i]);
+    servers[i] = new uart_server(&io_context, tcp_port, (uart_port_t)i, LED_DEFAULT_RX[i], LED_DEFAULT_TX[i], LED_DEFAULT_CONNECTED[i]);
   }
 
   // Block here forever
@@ -373,12 +380,12 @@ extern "C" void app_main()
     ESP_LOGI("MAIN", "Init");    
 
     // Start diaplay
-    LED_Display *dis = start_display();
+    // LED_Display *dis = start_display();
     ::vTaskDelay(100/portTICK_PERIOD_MS);
     // Start Wifi
-    start_wifi(dis);
+    start_wifi();
     // Start Uarts
-    start_uarts(dis);
+    start_uarts();
     
     ESP_LOGI("MAIN", "Exit");
 }

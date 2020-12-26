@@ -2,7 +2,7 @@
 #include <string>
 #include "uart_server.h"
 
-uart_server::uart_server(asio::io_context *io_context, short port, uart_port_t uart, LED_Display *dis, int rx_led, int tx_led, int sessionConnectedLed)
+uart_server::uart_server(asio::io_context *io_context, short port, uart_port_t uart, int rx_led, int tx_led, int sessionConnectedLed)
     //: acceptor_(io_context/*, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)*/)
 {
     // asio::ip::tcp::endpoint endpoint(asio::ip::tcp::v4(), port);
@@ -13,7 +13,7 @@ uart_server::uart_server(asio::io_context *io_context, short port, uart_port_t u
     _io_context = io_context;
     _port = port;
     // LED Matrix
-    _dis = dis;
+    // _dis = dis;
     _rxLed = rx_led;
     _txLed = tx_led;
     _sessionConnectedLed = sessionConnectedLed;
@@ -39,7 +39,7 @@ void uart_server::do_accept()
         [this, acceptor](std::error_code ec, asio::ip::tcp::socket socket) {
             if (!ec)
             {
-                _dis->drawpixB(_sessionConnectedLed, BLUE);
+                // _dis->drawpixB(_sessionConnectedLed, BLUE);
                 p_session = std::make_shared<tcp_session>(std::move(socket),
                     [=]() {
                         this->onsocket_disconection();
@@ -61,14 +61,14 @@ void uart_server::do_accept()
 void uart_server::onsocket_disconection()
 {
     ESP_LOGI("UART Server", "On Socket Disconnection");
-    _dis->drawpixB(_sessionConnectedLed, 0x000000);
+    // _dis->drawpixB(_sessionConnectedLed, 0x000000);
     p_session = nullptr;
     do_accept();
 }
 
 void uart_server::data_available(uint8_t * data, std::size_t length)
 {
-    _dis->drawpixB(_txLed, RED, (uint8_t)2);
+    // _dis->drawpixB(_txLed, RED, (uint8_t)2);
 
     uart_write_bytes(_uart, (const char *)data, length);
 }
@@ -99,7 +99,7 @@ void uart_server::start_uart()
         const int rxBytes = uart_read_bytes(_uart, data, RX_BUF_SIZE, 10 / portTICK_RATE_MS);
         if (rxBytes > 0)
         {
-            _dis->drawpixB(_rxLed, GREEN, (uint8_t)2);
+            // _dis->drawpixB(_rxLed, GREEN, (uint8_t)2);
             // Send over session if available
             if (p_session)
                 p_session->send(data, rxBytes);
