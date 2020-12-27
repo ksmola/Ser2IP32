@@ -19,8 +19,8 @@
 #define WIFI_FAIL_BIT BIT1
 
 #define EXAMPLE_ESP_MAXIMUM_RETRY 5
-#define EXAMPLE_ESP_WIFI_SSID      "lucas"
-#define EXAMPLE_ESP_WIFI_PASS      "bravewindow406"
+#define EXAMPLE_ESP_WIFI_SSID      "ssid"
+#define EXAMPLE_ESP_WIFI_PASS      "wifipassword"
 
 static EventGroupHandle_t s_wifi_event_group;
 
