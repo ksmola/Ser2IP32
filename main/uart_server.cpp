@@ -12,11 +12,9 @@ uart_server::uart_server(asio::io_context *io_context, short port, uart_port_t u
 
     _io_context = io_context;
     _port = port;
-    // LED Matrix
-    // _dis = dis;
-    _rxLed = rx_led;
-    _txLed = tx_led;
-    _sessionConnectedLed = sessionConnectedLed;
+    // _rxLed = rx_led;
+    // _txLed = tx_led;
+    // _sessionConnectedLed = sessionConnectedLed;
     // Start listening socket
     do_accept();
     // Uart

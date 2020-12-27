@@ -10,7 +10,6 @@
 #include "esp_wifi.h"
 #include "esp_system.h"
 #include "uart_server.h"
-// #include "LED_Display.h"
 #include "lwip/err.h"
 #include "lwip/sys.h"
 #include <cstdio>
@@ -260,18 +259,6 @@ void start_wifi()
   }
 }
 
-// LED_Display * start_display()
-// {
-//   // Init LED MAtrix
-//     LED_Display *dis = new LED_Display();
-//     dis->setTaskName("LEDs");
-// 		dis->setTaskPriority(2);
-//     dis->setCore(1);
-// 		dis->start();
-
-//     return dis;
-// }
-
 void start_uarts()
 {
   asio::io_context io_context;
@@ -380,7 +367,6 @@ extern "C" void app_main()
     ESP_LOGI("MAIN", "Init");    
 
     // Start diaplay
-    // LED_Display *dis = start_display();
     ::vTaskDelay(100/portTICK_PERIOD_MS);
     // Start Wifi
     start_wifi();

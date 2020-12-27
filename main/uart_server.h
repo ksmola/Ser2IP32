@@ -1,7 +1,6 @@
 #ifndef _UART_SERVER_H_
 #define _UART_SERVER_H_
 
-// #include "LED_Display.h"
 #include "tcp_session.h"
 #include "driver/uart.h"
 
@@ -27,10 +26,9 @@ private:
   int _port;
   asio::io_context *_io_context;
 
-  // LED_Display *_dis;
-  int _rxLed;
-  int _txLed;
-  int _sessionConnectedLed;
+  // int _rxLed;
+  // int _txLed;
+  // int _sessionConnectedLed;
 };
 
 #endif
